@@ -1,10 +1,40 @@
 describe 'Scratch', ->
 
-  describe 'Startup', ->
-    it 'checks to see if the user is logged in', ->
-      spyOn(Scratch, 'isLoggedIn')
+  beforeEach ->
+    jasmine.Ajax.install()
 
-      expect(Scratch.isLoggedIn).toHaveBeenCalled
+  afterEach ->
+    jasmine.Ajax.uninstall()
+
+  describe 'Startup', ->
+    it 'makes a call back to the Scratch server looking for login', ->
+      Scratch.init()
+      mostRecentRequest = jasmine.Ajax.requests.mostRecent()
+
+      expect(mostRecentRequest).not.toBeUndefined
+      expect(mostRecentRequest.method).toEqual("GET")
+
+    describe '#isLoggedIn', ->
+      it 'returns false when login text is NOT found', ->
+        Scratch.init()
+
+        jasmine.Ajax.requests.mostRecent().response
+          status: 200
+          contentType: "text/html"
+          responseText: "Missing login text"
+
+        expect(Scratch.isLoggedIn).toBe(false)
+
+      it 'returns true when login text IS found"', ->
+        Scratch.init()
+
+        jasmine.Ajax.requests.mostRecent().response
+          status: 200
+          contentType: "text/html"
+          responseText: "Logged in as"
+
+        expect(Scratch.isLoggedIn).toBe true
+        console.log Scratch.isLoggedIn
 
   describe 'User Experience', ->
     it 'creates a payment button'
