@@ -1,69 +1,38 @@
 describe 'Scratch', ->
 
-  describe 'setMerchantId', ->
+  describe 'Startup', ->
+    it 'checks to see if the user is logged in', ->
+      spyOn(Scratch, 'isLoggedIn')
 
-    it 'takes a string argument', ->
-      result = Scratch.setMerchantId('ABCDEFG12345')
-      expect(result).toBe true
+      expect(Scratch.isLoggedIn).toHaveBeenCalled
 
-  describe 'makePayment', ->
-    formValues = null
-    mostRecentUrl = null
-    mostRecentParams = null
+  describe 'User Experience', ->
+    it 'creates a payment button'
 
-    beforeEach ->
-      jasmine.Ajax.install()
-      return
+    describe 'Pressing the payment button', ->
+      it 'draws a confirmation dialog'
+      it 'darkens the rest of the page'
 
-    afterEach ->
-      jasmine.Ajax.uninstall()
+      describe 'Confirmation dialog', ->
+        it 'displays a description of the payment'
+        it 'displays the merchant logo'
+        it 'shows who is logged into Scratch'
+        it 'can be dismissed'
 
-    it 'makes a request authorization using the merchant ID', ->
-      # Arrange
-      formStub = jasmine.createSpy "formStub"
-      callBackStub = jasmine.createSpy "callBack"
+  describe 'Authorizing a Payment', ->
 
-      # Act
-      Scratch.setMerchantId('ABC')
-      Scratch.makePayment formStub, callBackStub
+    describe 'Transaction authorization succeeded (200)', ->
+      it 'submits the form with the acquired transaction code'
 
-      # Assert
-      mostRecentParams = jasmine.Ajax.requests.mostRecent().params
-      mostRecentUrl = jasmine.Ajax.requests.mostRecent().url
-      expect(mostRecentUrl).toMatch(/authorize/)
-      expect(mostRecentParams).toMatch(/merchant_id=ABC/)
+    describe 'One or more parameters are invalid (400)', ->
+      it 'displays information from the message body'
 
-    it 'makes requests in cents, not dollars', ->
-      # Arrange
-      formValues =
-        amount: 0.25
-      callBackStub = jasmine.createSpy "callBack"
+    describe 'The user is not currently logged in (401)', ->
+      it 'presents a login screen to the user'
 
-      # Act
-      Scratch.setMerchantId('ABC')
-      Scratch.makePayment formValues, callBackStub
-      mostRecentParams = jasmine.Ajax.requests.mostRecent().params
+    describe 'The user cannot currently pay for the transaction (402)', ->
+      it 'notifies the user that adding a payment method might help'
 
-      # Assert
-      expect(mostRecentParams).toMatch(/amount=25/)
-
-    it 'looks for a token upon successful web call', ->
-      # Arrange
-      formStub = jasmine.createSpy "formStub"
-      doneSpy = jasmine.createSpy "success"
-      callBack = (args) ->
-        if @readyState is @DONE
-          doneSpy @responseText.token
-
-      # Act
-      Scratch.setMerchantId('ABC')
-      Scratch.makePayment formStub, callBack
-
-      # Server sends back a successful call with the token
-      jasmine.Ajax.requests.mostRecent().response
-        status: 200
-        responseText:
-          token: "ABCDEFG"
-
-      # Assert
-      expect(doneSpy).toHaveBeenCalledWith "ABCDEFG"
+    describe 'Incorrect HTTP method (405)', ->
+      it 'presents an error message to the user'
+      it 'logs the error'
