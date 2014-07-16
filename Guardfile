@@ -1,4 +1,5 @@
-guard 'coffeescript', :input => 'lib/coffeescripts', :output => 'public/javascripts'
+guard 'coffeescript', :input => 'src/coffeescripts', :output => 'public/javascripts'
+guard 'coffeescript', :input => 'lib/coffeescripts', :output => 'spec/javascripts'
 guard 'coffeescript', :input => 'spec/coffeescripts', :output => 'spec/javascripts'
 
 guard 'livereload' do
