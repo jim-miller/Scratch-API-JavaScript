@@ -1,6 +1,8 @@
-guard 'coffeescript', :input => 'src/coffeescripts', :output => 'public/javascripts'
-guard 'coffeescript', :input => 'lib/coffeescripts', :output => 'spec/javascripts'
-guard 'coffeescript', :input => 'spec/coffeescripts', :output => 'spec/javascripts'
+guard 'coffeescript', output: 'public/javascripts', all_on_start: true do
+  watch(%r{^src/coffeescripts/(.+\.coffee)$})
+  watch(%r{^lib/coffeescripts/(.+\.coffee)$})
+  watch(%r{^spec/coffeescripts/(.+\.coffee)$})
+end
 
 guard 'livereload' do
   watch(%r{^spec/javascripts/.+\.js})

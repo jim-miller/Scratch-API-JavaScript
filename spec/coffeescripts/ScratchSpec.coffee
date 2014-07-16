@@ -6,13 +6,17 @@ describe 'Scratch', ->
   afterEach ->
     jasmine.Ajax.uninstall()
 
-  describe 'Startup', ->
-    it 'makes a call back to the Scratch server looking for login', ->
+  describe 'during initialization', ->
+    beforeEach ->
       Scratch.init()
+
+    it 'makes a call back to the Scratch server looking for login', ->
       mostRecentRequest = jasmine.Ajax.requests.mostRecent()
 
       expect(mostRecentRequest).not.toBeUndefined
       expect(mostRecentRequest.method).toEqual("GET")
+
+    it 'loads the payment button stylesheet'
 
   describe '#isLoggedIn', ->
     it 'returns false when login text is NOT found', ->
