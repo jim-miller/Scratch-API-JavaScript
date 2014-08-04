@@ -7,16 +7,23 @@ describe 'Scratch', ->
     jasmine.Ajax.uninstall()
 
   describe 'during initialization', ->
-    beforeEach ->
+    it 'checks for login', ->
+      spyOn(Scratch, 'checkLogin')
+
       Scratch.init()
+      expect(Scratch.checkLogin).toHaveBeenCalled()
 
     it 'makes a call back to the Scratch server looking for login', ->
+      Scratch.init()
       mostRecentRequest = jasmine.Ajax.requests.mostRecent()
 
-      expect(mostRecentRequest).not.toBeUndefined
+      expect(mostRecentRequest).not.toBeUndefined()
       expect(mostRecentRequest.method).toEqual("GET")
 
     it 'loads the payment button stylesheet'
+    it 'loads the supporting Bootstrap stylesheet'
+    it 'loads the supporting Bootstrap library'
+    it 'creates an iframe modal'
 
   describe '#isLoggedIn', ->
     it 'returns false when login text is NOT found', ->
@@ -41,7 +48,7 @@ describe 'Scratch', ->
       console.log Scratch.isLoggedIn
 
   describe 'User Experience', ->
-    it 'creates a payment button'
+    it 'creates payment buttons for each declared payment form'
 
     describe 'Pressing the payment button', ->
       describe 'when logged in', ->
