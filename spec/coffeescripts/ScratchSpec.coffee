@@ -14,9 +14,10 @@ describe 'Scratch', ->
       expect(Scratch.checkLogin).toHaveBeenCalled()
 
     it 'makes a call back to the Scratch server looking for login', ->
+      Scratch.init()
       mostRecentRequest = jasmine.Ajax.requests.mostRecent()
 
-      expect(mostRecentRequest).not.toBeUndefined
+      expect(mostRecentRequest).not.toBeUndefined()
       expect(mostRecentRequest.method).toEqual("GET")
 
     it 'loads the payment button stylesheet'
@@ -47,7 +48,7 @@ describe 'Scratch', ->
       console.log Scratch.isLoggedIn
 
   describe 'User Experience', ->
-    it 'creates a payment button'
+    it 'creates payment buttons for each declared payment form'
 
     describe 'Pressing the payment button', ->
       describe 'when logged in', ->
