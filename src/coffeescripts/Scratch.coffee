@@ -2,7 +2,10 @@ class @Scratch
   @isLoggedIn = false
 
   @init: ->
-    xhr = new XMLHttpRequest();
+    instance = new Scratch()
+
+  checkLogin: ->
+    xhr = new XMLHttpRequest()
     url = "http://pacicific-reaches.herokuapp.com/accounts/profile/";
     params = "merchant=kgtwvge&amount=0.50&description=testing";
 
