@@ -34,7 +34,7 @@ describe 'Scratch', ->
         contentType: "text/html"
         responseText: "Missing login text"
 
-      expect(Scratch.isLoggedIn).toBe(false)
+      expect(Scratch.isLoggedIn()).toBe(false)
 
     it 'returns true when login text IS found"', ->
       Scratch.init()
@@ -44,8 +44,7 @@ describe 'Scratch', ->
         contentType: "text/html"
         responseText: "Logged in as"
 
-      expect(Scratch.isLoggedIn).toBe true
-      console.log Scratch.isLoggedIn
+      expect(Scratch.isLoggedIn()).toBe(true)
 
   describe 'User Experience', ->
     it 'creates payment buttons for each declared payment form'

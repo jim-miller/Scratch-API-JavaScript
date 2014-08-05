@@ -1,15 +1,36 @@
+throw new Error("Scratch requires jQuery to be loaded before any references to the Scratch library") if typeof jQuery is "undefined"
+
 class @Scratch
   server = "http://scratch-stand-in.herokuapp.com"
   server = "http://localhost:9292"
+  _isLoggedIn = false
 
   @init: ->
     instance = new Scratch()
+
+  @checkLogin: ->
+    xhr = new XMLHttpRequest();
+    url = server + "/accounts/profile/";
+
+    xhr.onreadystatechange = ->
+      if this.readyState == this.DONE
+        console.log this.responseText
+        if this.status == 200 && this.responseText.indexOf("Logged in") > -1
+          _isLoggedIn = true
+        else
+          _isLoggedIn = false
+
+    xhr.open("GET", url, true)
+    xhr.send()
+    return
+
+  @isLoggedIn: ->
+    return _isLoggedIn
 
   constructor: (args) ->
     console.log('starting up')
     @loadCss()
     @loadFonts()
-    @loadBootstrap()
     @insertPaymentModal()
     @drawPayButtons()
     @createPayLinks()
@@ -37,25 +58,6 @@ class @Scratch
       link.href = "http://fonts.googleapis.com/css?family=Titillium+Web:600"
       link.media = "all"
       head.appendChild link
-
-  loadBootstrap: ->
-    bootstrap3_enabled = (typeof $().emulateTransitionEnd == 'function')
-    console.log("Bootstrap 3 enabled? " + bootstrap3_enabled)
-
-    # We have to always load Bootstrap since the site-scoped Bootstrap is
-    # unavailable to functions within the Scratch library for some reason.
-    head = document.getElementsByTagName("head")[0]
-    scriptLink = document.createElement('script')
-    scriptLink.src = "//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"
-    head.appendChild scriptLink
-
-    # We'll assume for now that they don't have BS CSS since they didn't have BS JS
-    link = document.createElement("link")
-    link.rel = "stylesheet"
-    link.type = "text/css"
-    link.href = "//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"
-    link.media = "all"
-    head.appendChild link
 
   insertPaymentModal: ->
     body = document.getElementsByTagName("body")[0]
@@ -108,5 +110,4 @@ class @Scratch
       $("#scratch-payment-modal #remote-content").html "<iframe width=\"100%\" height=\"100%\" frameborder=\"0\" scrolling=\"yes\" allowtransparency=\"true\" src=\"" + url + "\"></iframe>"
       $("#scratch-payment-modal").modal()
       return
-
     return

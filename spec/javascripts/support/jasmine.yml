@@ -10,9 +10,11 @@
 #   - lib/source2.js
 #   - dist/**/*.js
 #
+# NOTICE: lib holds vendor libs (i.e. jQuery) that need to be loaded BEFORE
+#         the Scratch libs can be loaded
 src_files:
-  - public/javascripts/**/*.js
   - lib/javascripts/**/*.js
+  - public/javascripts/**/*.js
 
 # stylesheets
 #
